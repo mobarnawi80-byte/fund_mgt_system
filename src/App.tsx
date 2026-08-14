@@ -8,6 +8,7 @@ import { ApprovalModal } from './components/ApprovalModal';
 import { ManualPaymentModal } from './components/ManualPaymentModal';
 import { MemberPortal } from './components/member/MemberPortal';
 import { PayrollReconciliationModule } from './components/payroll/PayrollReconciliationModule';
+import { ContributionManagementPage } from './components/contributions/ContributionManagementPage';
 import { 
   INITIAL_METRICS, 
   PENDING_LOANS, 
@@ -18,7 +19,7 @@ import {
   PayrollException,
   DEPARTMENTS_DATA
 } from './mock/dashboardData';
-import { CheckCircle2, Download, RefreshCw, UserCheck, Shield, FileSpreadsheet } from 'lucide-react';
+import { CheckCircle2, Download, RefreshCw, UserCheck, Shield, FileSpreadsheet, PiggyBank } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [portalMode, setPortalMode] = useState<'ADMIN' | 'MEMBER'>('ADMIN');
@@ -124,11 +125,19 @@ export const App: React.FC = () => {
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-blue-500"></span>
                 <p className="text-xs font-bold text-blue-400 uppercase tracking-widest">
-                  {activeTab === 'payroll' ? 'Payroll Reconciliation Module' : 'Cooperative Fund Administrative Control'}
+                  {activeTab === 'payroll' 
+                    ? 'Payroll Reconciliation Module' 
+                    : activeTab === 'contributions'
+                    ? 'Monthly Contribution Management'
+                    : 'Cooperative Fund Administrative Control'}
                 </p>
               </div>
               <h2 className="text-xl lg:text-2xl font-black text-slate-100 tracking-tight mt-0.5">
-                {activeTab === 'payroll' ? 'Payroll Ingestion, Verification & Posting' : 'Executive Financial Dashboard'}
+                {activeTab === 'payroll' 
+                  ? 'Payroll Ingestion, Verification & Posting' 
+                  : activeTab === 'contributions'
+                  ? 'Member Monthly Contributions & Compliance'
+                  : 'Executive Financial Dashboard'}
               </h2>
             </div>
 
@@ -141,7 +150,7 @@ export const App: React.FC = () => {
                 View as Member Portal
               </button>
 
-              {activeTab === 'payroll' ? (
+              {activeTab !== 'overview' ? (
                 <button 
                   onClick={() => setActiveTab('overview')}
                   className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition flex items-center gap-2 shadow-sm"
@@ -171,6 +180,8 @@ export const App: React.FC = () => {
           {/* Render Active View */}
           {activeTab === 'payroll' ? (
             <PayrollReconciliationModule />
+          ) : activeTab === 'contributions' ? (
+            <ContributionManagementPage />
           ) : (
             <>
               {/* 1. Fund Overview 8 Cards */}
