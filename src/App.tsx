@@ -13,6 +13,7 @@ import { LoanManagementPage } from './components/loans/LoanManagementPage';
 import { WithdrawalManagementPage } from './components/withdrawals/WithdrawalManagementPage';
 import { CentralizedApprovalDashboard } from './components/approvals/CentralizedApprovalDashboard';
 import { ReportingModulePage } from './components/reports/ReportingModulePage';
+import { NotificationCenter } from './components/notifications/NotificationCenter';
 import { 
   INITIAL_METRICS, 
   PENDING_LOANS, 
@@ -23,7 +24,7 @@ import {
   PayrollException,
   DEPARTMENTS_DATA
 } from './mock/dashboardData';
-import { CheckCircle2, Download, RefreshCw, UserCheck, Shield, FileSpreadsheet, PiggyBank, HandCoins, ArrowDownCircle, ShieldCheck, BarChart3 } from 'lucide-react';
+import { CheckCircle2, Download, RefreshCw, UserCheck, Shield, FileSpreadsheet, PiggyBank, HandCoins, ArrowDownCircle, ShieldCheck, BarChart3, Bell } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [portalMode, setPortalMode] = useState<'ADMIN' | 'MEMBER'>('ADMIN');
@@ -141,6 +142,8 @@ export const App: React.FC = () => {
                     ? 'Centralized Financial Governance & Committee Approvals'
                     : activeTab === 'reports'
                     ? 'Statutory Financial Statements & Reporting Engine'
+                    : activeTab === 'notifications'
+                    ? 'Automated Notification System (In-App, SMS & Email)'
                     : 'Cooperative Fund Administrative Control'}
                 </p>
               </div>
@@ -157,6 +160,8 @@ export const App: React.FC = () => {
                   ? 'Committee Multi-Signature Governance Dashboard'
                   : activeTab === 'reports'
                   ? 'General Ledger Financial Reporting & Export Engine'
+                  : activeTab === 'notifications'
+                  ? 'Multi-Channel Alert Dispatcher & User History'
                   : 'Executive Financial Dashboard'}
               </h2>
             </div>
@@ -210,6 +215,8 @@ export const App: React.FC = () => {
             <CentralizedApprovalDashboard />
           ) : activeTab === 'reports' ? (
             <ReportingModulePage />
+          ) : activeTab === 'notifications' ? (
+            <NotificationCenter />
           ) : (
             <>
               {/* 1. Fund Overview 8 Cards */}
