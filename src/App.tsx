@@ -9,6 +9,7 @@ import { ManualPaymentModal } from './components/ManualPaymentModal';
 import { MemberPortal } from './components/member/MemberPortal';
 import { PayrollReconciliationModule } from './components/payroll/PayrollReconciliationModule';
 import { ContributionManagementPage } from './components/contributions/ContributionManagementPage';
+import { LoanManagementPage } from './components/loans/LoanManagementPage';
 import { 
   INITIAL_METRICS, 
   PENDING_LOANS, 
@@ -19,7 +20,7 @@ import {
   PayrollException,
   DEPARTMENTS_DATA
 } from './mock/dashboardData';
-import { CheckCircle2, Download, RefreshCw, UserCheck, Shield, FileSpreadsheet, PiggyBank } from 'lucide-react';
+import { CheckCircle2, Download, RefreshCw, UserCheck, Shield, FileSpreadsheet, PiggyBank, HandCoins } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [portalMode, setPortalMode] = useState<'ADMIN' | 'MEMBER'>('ADMIN');
@@ -129,6 +130,8 @@ export const App: React.FC = () => {
                     ? 'Payroll Reconciliation Module' 
                     : activeTab === 'contributions'
                     ? 'Monthly Contribution Management'
+                    : activeTab === 'loans'
+                    ? '0% Interest Loan Management System'
                     : 'Cooperative Fund Administrative Control'}
                 </p>
               </div>
@@ -137,6 +140,8 @@ export const App: React.FC = () => {
                   ? 'Payroll Ingestion, Verification & Posting' 
                   : activeTab === 'contributions'
                   ? 'Member Monthly Contributions & Compliance'
+                  : activeTab === 'loans'
+                  ? 'Salary Advance & Emergency Loan Portfolio'
                   : 'Executive Financial Dashboard'}
               </h2>
             </div>
@@ -182,6 +187,8 @@ export const App: React.FC = () => {
             <PayrollReconciliationModule />
           ) : activeTab === 'contributions' ? (
             <ContributionManagementPage />
+          ) : activeTab === 'loans' ? (
+            <LoanManagementPage />
           ) : (
             <>
               {/* 1. Fund Overview 8 Cards */}
