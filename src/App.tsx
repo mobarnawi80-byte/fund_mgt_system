@@ -14,6 +14,7 @@ import { WithdrawalManagementPage } from './components/withdrawals/WithdrawalMan
 import { CentralizedApprovalDashboard } from './components/approvals/CentralizedApprovalDashboard';
 import { ReportingModulePage } from './components/reports/ReportingModulePage';
 import { NotificationCenter } from './components/notifications/NotificationCenter';
+import { SecurityGovernanceDashboard } from './components/security/SecurityGovernanceDashboard';
 import { 
   INITIAL_METRICS, 
   PENDING_LOANS, 
@@ -24,7 +25,7 @@ import {
   PayrollException,
   DEPARTMENTS_DATA
 } from './mock/dashboardData';
-import { CheckCircle2, Download, RefreshCw, UserCheck, Shield, FileSpreadsheet, PiggyBank, HandCoins, ArrowDownCircle, ShieldCheck, BarChart3, Bell } from 'lucide-react';
+import { CheckCircle2, Download, RefreshCw, UserCheck, Shield, FileSpreadsheet, PiggyBank, HandCoins, ArrowDownCircle, ShieldCheck, BarChart3, Bell, Lock } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [portalMode, setPortalMode] = useState<'ADMIN' | 'MEMBER'>('ADMIN');
@@ -144,6 +145,8 @@ export const App: React.FC = () => {
                     ? 'Statutory Financial Statements & Reporting Engine'
                     : activeTab === 'notifications'
                     ? 'Automated Notification System (In-App, SMS & Email)'
+                    : activeTab === 'security'
+                    ? 'Security Controls, 2FA & 5-State Financial Lifecycle'
                     : 'Cooperative Fund Administrative Control'}
                 </p>
               </div>
@@ -162,6 +165,8 @@ export const App: React.FC = () => {
                   ? 'General Ledger Financial Reporting & Export Engine'
                   : activeTab === 'notifications'
                   ? 'Multi-Channel Alert Dispatcher & User History'
+                  : activeTab === 'security'
+                  ? 'Security Governance, TOTP 2FA & Immutability'
                   : 'Executive Financial Dashboard'}
               </h2>
             </div>
@@ -217,6 +222,8 @@ export const App: React.FC = () => {
             <ReportingModulePage />
           ) : activeTab === 'notifications' ? (
             <NotificationCenter />
+          ) : activeTab === 'security' ? (
+            <SecurityGovernanceDashboard />
           ) : (
             <>
               {/* 1. Fund Overview 8 Cards */}
