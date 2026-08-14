@@ -6,8 +6,8 @@ import { DashboardCharts } from './components/DashboardCharts';
 import { DashboardSections } from './components/DashboardSections';
 import { ApprovalModal } from './components/ApprovalModal';
 import { ManualPaymentModal } from './components/ManualPaymentModal';
-import { PayrollImportModal } from './components/PayrollImportModal';
 import { MemberPortal } from './components/member/MemberPortal';
+import { PayrollReconciliationModule } from './components/payroll/PayrollReconciliationModule';
 import { 
   INITIAL_METRICS, 
   PENDING_LOANS, 
@@ -18,7 +18,7 @@ import {
   PayrollException,
   DEPARTMENTS_DATA
 } from './mock/dashboardData';
-import { CheckCircle2, Download, RefreshCw, UserCheck, Shield } from 'lucide-react';
+import { CheckCircle2, Download, RefreshCw, UserCheck, Shield, FileSpreadsheet } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [portalMode, setPortalMode] = useState<'ADMIN' | 'MEMBER'>('ADMIN');
@@ -33,8 +33,6 @@ export const App: React.FC = () => {
 
   const [manualPaymentModalOpen, setManualPaymentModalOpen] = useState(false);
   const [selectedMemberForPayment, setSelectedMemberForPayment] = useState<OutstandingMember | null>(null);
-
-  const [payrollImportModalOpen, setPayrollImportModalOpen] = useState(false);
 
   // Toast notification
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -66,10 +64,6 @@ export const App: React.FC = () => {
 
   const handleSaveManualPayment = (paymentData: any) => {
     showToast(`Manual payment of ₦${paymentData.amount.toLocaleString()} for ${paymentData.memberName} verified and posted.`);
-  };
-
-  const handleImportPayroll = (batchData: any) => {
-    showToast(`Payroll batch ${batchData.batchReference} successfully posted to the core double-entry ledger.`);
   };
 
   const handleResolveException = (exc: PayrollException) => {
@@ -104,7 +98,7 @@ export const App: React.FC = () => {
         setDepartmentFilter={setDepartmentFilter}
         departments={departmentsList}
         onOpenManualPayment={() => handleOpenManualPayment()}
-        onOpenPayrollImport={() => setPayrollImportModalOpen(true)}
+        onOpenPayrollImport={() => setActiveTab('payroll')}
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
       />
@@ -129,15 +123,16 @@ export const App: React.FC = () => {
             <div>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                <p className="text-xs font-bold text-blue-400 uppercase tracking-widest">Cooperative Fund Administrative Control</p>
+                <p className="text-xs font-bold text-blue-400 uppercase tracking-widest">
+                  {activeTab === 'payroll' ? 'Payroll Reconciliation Module' : 'Cooperative Fund Administrative Control'}
+                </p>
               </div>
               <h2 className="text-xl lg:text-2xl font-black text-slate-100 tracking-tight mt-0.5">
-                Executive Financial Dashboard
+                {activeTab === 'payroll' ? 'Payroll Ingestion, Verification & Posting' : 'Executive Financial Dashboard'}
               </h2>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              {/* Member Portal Switcher */}
               <button
                 onClick={() => setPortalMode('MEMBER')}
                 className="px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-md shadow-blue-600/20 transition active:scale-95 flex items-center gap-2"
@@ -146,13 +141,22 @@ export const App: React.FC = () => {
                 View as Member Portal
               </button>
 
-              <button 
-                onClick={() => showToast('Financial Statement & Monthly Summary PDF generated successfully.')}
-                className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition flex items-center gap-2 shadow-sm"
-              >
-                <Download className="w-3.5 h-3.5 text-blue-400" />
-                Export Statement
-              </button>
+              {activeTab === 'payroll' ? (
+                <button 
+                  onClick={() => setActiveTab('overview')}
+                  className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition flex items-center gap-2 shadow-sm"
+                >
+                  &larr; Back to Overview
+                </button>
+              ) : (
+                <button 
+                  onClick={() => showToast('Financial Statement & Monthly Summary PDF generated successfully.')}
+                  className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition flex items-center gap-2 shadow-sm"
+                >
+                  <Download className="w-3.5 h-3.5 text-blue-400" />
+                  Export Statement
+                </button>
+              )}
 
               <button 
                 onClick={() => showToast('Ledger balances synchronized with live database journal.')}
@@ -164,18 +168,25 @@ export const App: React.FC = () => {
             </div>
           </div>
 
-          {/* 1. Fund Overview 8 Cards */}
-          <FundOverviewCards metrics={currentMetrics} />
+          {/* Render Active View */}
+          {activeTab === 'payroll' ? (
+            <PayrollReconciliationModule />
+          ) : (
+            <>
+              {/* 1. Fund Overview 8 Cards */}
+              <FundOverviewCards metrics={currentMetrics} />
 
-          {/* 2. 5 Primary Charts */}
-          <DashboardCharts />
+              {/* 2. 5 Primary Charts */}
+              <DashboardCharts />
 
-          {/* 3. Interactive Data Tables & Sections */}
-          <DashboardSections
-            onOpenApprovalModal={handleOpenApproval}
-            onOpenManualPaymentForMember={(m) => handleOpenManualPayment(m)}
-            onResolveException={handleResolveException}
-          />
+              {/* 3. Interactive Data Tables & Sections */}
+              <DashboardSections
+                onOpenApprovalModal={handleOpenApproval}
+                onOpenManualPaymentForMember={(m) => handleOpenManualPayment(m)}
+                onResolveException={handleResolveException}
+              />
+            </>
+          )}
         </main>
       </div>
 
@@ -192,12 +203,6 @@ export const App: React.FC = () => {
         onClose={() => setManualPaymentModalOpen(false)}
         selectedMember={selectedMemberForPayment}
         onSave={handleSaveManualPayment}
-      />
-
-      <PayrollImportModal
-        isOpen={payrollImportModalOpen}
-        onClose={() => setPayrollImportModalOpen(false)}
-        onImportComplete={handleImportPayroll}
       />
     </div>
   );
