@@ -7,6 +7,7 @@ import { DashboardSections } from './components/DashboardSections';
 import { ApprovalModal } from './components/ApprovalModal';
 import { ManualPaymentModal } from './components/ManualPaymentModal';
 import { PayrollImportModal } from './components/PayrollImportModal';
+import { MemberPortal } from './components/member/MemberPortal';
 import { 
   INITIAL_METRICS, 
   PENDING_LOANS, 
@@ -17,9 +18,10 @@ import {
   PayrollException,
   DEPARTMENTS_DATA
 } from './mock/dashboardData';
-import { CheckCircle2, Download, RefreshCw } from 'lucide-react';
+import { CheckCircle2, Download, RefreshCw, UserCheck, Shield } from 'lucide-react';
 
 export const App: React.FC = () => {
+  const [portalMode, setPortalMode] = useState<'ADMIN' | 'MEMBER'>('ADMIN');
   const [activeTab, setActiveTab] = useState('overview');
   const [dateFilter, setDateFilter] = useState('this-month');
   const [departmentFilter, setDepartmentFilter] = useState('ALL');
@@ -74,6 +76,16 @@ export const App: React.FC = () => {
     showToast(`Exception for ${exc.rawName} (${exc.employeeId}) marked resolved.`);
   };
 
+  // If in Member Portal Mode, render the MemberPortal view
+  if (portalMode === 'MEMBER') {
+    return (
+      <MemberPortal
+        onBackToAdmin={() => setPortalMode('ADMIN')}
+        showAdminToggle={true}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
       {/* Toast Notification */}
@@ -112,7 +124,7 @@ export const App: React.FC = () => {
 
         {/* Content Area */}
         <main className="flex-1 p-4 lg:p-8 space-y-6 max-w-[1600px] w-full overflow-x-hidden">
-          {/* Top Title Banner & Export controls */}
+          {/* Top Title Banner & Portal Switcher */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 p-4 rounded-2xl border border-slate-800/80">
             <div>
               <div className="flex items-center gap-2">
@@ -124,13 +136,22 @@ export const App: React.FC = () => {
               </h2>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Member Portal Switcher */}
+              <button
+                onClick={() => setPortalMode('MEMBER')}
+                className="px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-md shadow-blue-600/20 transition active:scale-95 flex items-center gap-2"
+              >
+                <UserCheck className="w-4 h-4" />
+                View as Member Portal
+              </button>
+
               <button 
                 onClick={() => showToast('Financial Statement & Monthly Summary PDF generated successfully.')}
                 className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition flex items-center gap-2 shadow-sm"
               >
                 <Download className="w-3.5 h-3.5 text-blue-400" />
-                Export Monthly Statement
+                Export Statement
               </button>
 
               <button 
