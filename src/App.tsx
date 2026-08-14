@@ -10,6 +10,7 @@ import { MemberPortal } from './components/member/MemberPortal';
 import { PayrollReconciliationModule } from './components/payroll/PayrollReconciliationModule';
 import { ContributionManagementPage } from './components/contributions/ContributionManagementPage';
 import { LoanManagementPage } from './components/loans/LoanManagementPage';
+import { WithdrawalManagementPage } from './components/withdrawals/WithdrawalManagementPage';
 import { 
   INITIAL_METRICS, 
   PENDING_LOANS, 
@@ -20,7 +21,7 @@ import {
   PayrollException,
   DEPARTMENTS_DATA
 } from './mock/dashboardData';
-import { CheckCircle2, Download, RefreshCw, UserCheck, Shield, FileSpreadsheet, PiggyBank, HandCoins } from 'lucide-react';
+import { CheckCircle2, Download, RefreshCw, UserCheck, Shield, FileSpreadsheet, PiggyBank, HandCoins, ArrowDownCircle } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [portalMode, setPortalMode] = useState<'ADMIN' | 'MEMBER'>('ADMIN');
@@ -132,6 +133,8 @@ export const App: React.FC = () => {
                     ? 'Monthly Contribution Management'
                     : activeTab === 'loans'
                     ? '0% Interest Loan Management System'
+                    : activeTab === 'withdrawals'
+                    ? 'Member Withdrawal & Savings Liquidation'
                     : 'Cooperative Fund Administrative Control'}
                 </p>
               </div>
@@ -142,6 +145,8 @@ export const App: React.FC = () => {
                   ? 'Member Monthly Contributions & Compliance'
                   : activeTab === 'loans'
                   ? 'Salary Advance & Emergency Loan Portfolio'
+                  : activeTab === 'withdrawals'
+                  ? 'Withdrawal Requests, Approvals & Disbursal'
                   : 'Executive Financial Dashboard'}
               </h2>
             </div>
@@ -189,6 +194,8 @@ export const App: React.FC = () => {
             <ContributionManagementPage />
           ) : activeTab === 'loans' ? (
             <LoanManagementPage />
+          ) : activeTab === 'withdrawals' ? (
+            <WithdrawalManagementPage />
           ) : (
             <>
               {/* 1. Fund Overview 8 Cards */}
