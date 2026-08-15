@@ -7,6 +7,7 @@ import { DashboardSections } from './components/DashboardSections';
 import { ApprovalModal } from './components/ApprovalModal';
 import { ManualPaymentModal } from './components/ManualPaymentModal';
 import { MemberPortal } from './components/member/MemberPortal';
+import { MobileAppContainer } from './mobile/MobileAppContainer';
 import { PayrollReconciliationModule } from './components/payroll/PayrollReconciliationModule';
 import { ContributionManagementPage } from './components/contributions/ContributionManagementPage';
 import { LoanManagementPage } from './components/loans/LoanManagementPage';
@@ -25,10 +26,10 @@ import {
   PayrollException,
   DEPARTMENTS_DATA
 } from './mock/dashboardData';
-import { CheckCircle2, Download, RefreshCw, UserCheck, Shield, FileSpreadsheet, PiggyBank, HandCoins, ArrowDownCircle, ShieldCheck, BarChart3, Bell, Lock } from 'lucide-react';
+import { CheckCircle2, Download, RefreshCw, UserCheck, Shield, FileSpreadsheet, PiggyBank, HandCoins, ArrowDownCircle, ShieldCheck, BarChart3, Bell, Lock, Smartphone } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const [portalMode, setPortalMode] = useState<'ADMIN' | 'MEMBER'>('ADMIN');
+  const [portalMode, setPortalMode] = useState<'ADMIN' | 'MEMBER' | 'MOBILE'>('ADMIN');
   const [activeTab, setActiveTab] = useState('overview');
   const [dateFilter, setDateFilter] = useState('this-month');
   const [departmentFilter, setDepartmentFilter] = useState('ALL');
@@ -77,7 +78,12 @@ export const App: React.FC = () => {
     showToast(`Exception for ${exc.rawName} (${exc.employeeId}) marked resolved.`);
   };
 
-  // If in Member Portal Mode, render the MemberPortal view
+  // If in Mobile App Mode, render the MobileAppContainer
+  if (portalMode === 'MOBILE') {
+    return <MobileAppContainer onBackToAdmin={() => setPortalMode('ADMIN')} />;
+  }
+
+  // If in Member Web Portal Mode, render the MemberPortal view
   if (portalMode === 'MEMBER') {
     return (
       <MemberPortal
@@ -173,11 +179,19 @@ export const App: React.FC = () => {
 
             <div className="flex flex-wrap items-center gap-2">
               <button
+                onClick={() => setPortalMode('MOBILE')}
+                className="px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-md shadow-emerald-600/20 transition active:scale-95 flex items-center gap-1.5"
+              >
+                <Smartphone className="w-4 h-4" />
+                Mobile App (iOS/Android)
+              </button>
+
+              <button
                 onClick={() => setPortalMode('MEMBER')}
-                className="px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-md shadow-blue-600/20 transition active:scale-95 flex items-center gap-2"
+                className="px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-md shadow-blue-600/20 transition active:scale-95 flex items-center gap-1.5"
               >
                 <UserCheck className="w-4 h-4" />
-                View as Member Portal
+                Member Web Portal
               </button>
 
               {activeTab !== 'overview' ? (
