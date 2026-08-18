@@ -60,8 +60,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       badgeColor: 'bg-indigo-500/20 text-indigo-300'
     },
     { id: 'approvals', label: 'Committee Approvals', icon: CheckSquare },
-    { id: 'ledger', label: 'General Ledger', icon: BookOpen },
     { id: 'reports', label: 'Financial Reports', icon: BarChart3 },
+    { id: 'devops', label: 'Cloud Deployment & DevOps', icon: Server },
+    { id: 'security', label: 'Security Controls & 2FA', icon: ShieldAlert },
     { id: 'settings', label: 'System & Policy Config', icon: Settings },
   ];
 

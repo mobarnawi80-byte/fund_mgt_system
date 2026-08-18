@@ -16,6 +16,7 @@ import { CentralizedApprovalDashboard } from './components/approvals/Centralized
 import { ReportingModulePage } from './components/reports/ReportingModulePage';
 import { NotificationCenter } from './components/notifications/NotificationCenter';
 import { SecurityGovernanceDashboard } from './components/security/SecurityGovernanceDashboard';
+import { CloudDeploymentCenter } from './components/devops/CloudDeploymentCenter';
 import { 
   INITIAL_METRICS, 
   PENDING_LOANS, 
@@ -153,6 +154,8 @@ export const App: React.FC = () => {
                     ? 'Automated Notification System (In-App, SMS & Email)'
                     : activeTab === 'security'
                     ? 'Security Controls, 2FA & 5-State Financial Lifecycle'
+                    : activeTab === 'devops'
+                    ? 'Production Cloud Infrastructure & DevOps Cockpit'
                     : 'Cooperative Fund Administrative Control'}
                 </p>
               </div>
@@ -173,6 +176,8 @@ export const App: React.FC = () => {
                   ? 'Multi-Channel Alert Dispatcher & User History'
                   : activeTab === 'security'
                   ? 'Security Governance, TOTP 2FA & Immutability'
+                  : activeTab === 'devops'
+                  ? 'Docker Containers, CI/CD Pipeline & Disaster Recovery'
                   : 'Executive Financial Dashboard'}
               </h2>
             </div>
@@ -238,6 +243,8 @@ export const App: React.FC = () => {
             <NotificationCenter />
           ) : activeTab === 'security' ? (
             <SecurityGovernanceDashboard />
+          ) : activeTab === 'devops' ? (
+            <CloudDeploymentCenter />
           ) : (
             <>
               {/* 1. Fund Overview 8 Cards */}
